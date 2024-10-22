@@ -32,7 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.common.utils.UiText
-import androidx.compose.foundation.lazy.items
+//import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -81,48 +81,48 @@ fun RecipeListScreen(
 
         uiState.value.data?.let { list ->
             LazyColumn(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
-                items(list) { recipe ->
-                    Card(
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
-                            .clickable { onClick(recipe.idMeal) },
-                    ) {
-                        AsyncImage(
-                            model = recipe.strMealThumb,
-                            contentDescription = recipe.strCategory
-                        )
-
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Text(text = recipe.strMeal, style = MaterialTheme.typography.bodyLarge)
-                        Spacer(modifier = Modifier.height(12.dp))
-                        if (recipe.strTags.isNotEmpty()) {
-                            FlowRow {
-                                recipe.strTags.split(",").forEach { tag ->
-                                    Box(
-                                        modifier = Modifier.wrapContentSize().background(
-                                            color = Color.White,
-                                            shape = RoundedCornerShape(12.dp)
-                                        ).border(
-                                            width = 1.dp,
-                                            color = Color.Red,
-                                            shape = RoundedCornerShape(12.dp)
-                                        ),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Text(
-                                            text = tag,
-                                            modifier = Modifier.padding(
-                                                horizontal = 8.dp,
-                                                vertical = 4.dp
-                                            )
-                                        )
-                                    }
-                                }
-                            }
-                            Spacer(modifier = Modifier.height(12.dp))
-                        }
-                    }
-                }
+//                items(list) { recipe ->
+//                    Card(
+//                        shape = RoundedCornerShape(12.dp),
+//                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+//                            .clickable { onClick(recipe.idMeal) },
+//                    ) {
+//                        AsyncImage(
+//                            model = recipe.strMealThumb,
+//                            contentDescription = recipe.strCategory
+//                        )
+//
+//                        Spacer(modifier = Modifier.height(12.dp))
+//                        Text(text = recipe.strMeal, style = MaterialTheme.typography.bodyLarge)
+//                        Spacer(modifier = Modifier.height(12.dp))
+//                        if (recipe.strTags.isNotEmpty()) {
+//                            FlowRow {
+//                                recipe.strTags.split(",").forEach { tag ->
+//                                    Box(
+//                                        modifier = Modifier.wrapContentSize().background(
+//                                            color = Color.White,
+//                                            shape = RoundedCornerShape(12.dp)
+//                                        ).border(
+//                                            width = 1.dp,
+//                                            color = Color.Red,
+//                                            shape = RoundedCornerShape(12.dp)
+//                                        ),
+//                                        contentAlignment = Alignment.Center
+//                                    ) {
+//                                        Text(
+//                                            text = tag,
+//                                            modifier = Modifier.padding(
+//                                                horizontal = 8.dp,
+//                                                vertical = 4.dp
+//                                            )
+//                                        )
+//                                    }
+//                                }
+//                            }
+//                            Spacer(modifier = Modifier.height(12.dp))
+//                        }
+//                    }
+//                }
             }
         }
     }
