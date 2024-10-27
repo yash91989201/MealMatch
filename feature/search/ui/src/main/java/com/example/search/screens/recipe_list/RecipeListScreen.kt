@@ -61,7 +61,9 @@ fun RecipeListScreen(
     LaunchedEffect(key1 = viewModel.navigation) {
         viewModel.navigation.flowWithLifecycle(lifecycleOwner.lifecycle).collectLatest {
             when (it) {
-                RecipeList.Navigation.GoToFavoriteScreen -> TODO()
+                RecipeList.Navigation.GoToFavoriteScreen -> {
+                    navHostController.navigate(NavigationRoutes.FavouriteScreen)
+                }
                 is RecipeList.Navigation.GoToRecipeDetails -> {
                     navHostController.navigate(NavigationRoutes.RecipeDetails.sendId(it.id))
                 }

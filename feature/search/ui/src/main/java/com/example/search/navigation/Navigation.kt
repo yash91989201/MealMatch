@@ -8,6 +8,8 @@ import androidx.navigation.compose.navigation
 import com.example.common.navigation.FeatureApi
 import com.example.common.navigation.NavigationRoutes
 import com.example.common.navigation.NavigationSubGraphRoute
+import com.example.search.screens.favourite.FavouriteScreen
+import com.example.search.screens.favourite.FavouriteViewModel
 import com.example.search.screens.recipe_details.RecipeDetails
 import com.example.search.screens.recipe_details.RecipeDetailsScreen
 import com.example.search.screens.recipe_details.RecipeDetailsViewModel
@@ -57,6 +59,16 @@ class SearchFeatureApiImpl : SearchFeatureApi {
                     onDelete = {
                         viewModel.onEvent(RecipeDetails.Event.DeleteRecipe(it))
                     },
+                )
+            }
+            composable(route = NavigationRoutes.FavouriteScreen.route) {
+                val viewModel = hiltViewModel<FavouriteViewModel>()
+                FavouriteScreen(
+                    viewModel = viewModel,
+                    navHostController = navHostController,
+                    onClick = { mealId ->
+                        viewModel.onEvent(FavouriteScreen.Event.GoToRecipeDetails(mealId))
+                    }
                 )
             }
         }

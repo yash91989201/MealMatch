@@ -38,24 +38,48 @@ import com.example.common.utils.UiText
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.search.screens.recipe_list.RecipeList
+import com.example.common.navigation.NavigationRoutes
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun FavouriteScreen(viewModel: FavouriteViewModel, onClick: (String) -> Unit) {
+fun FavouriteScreen(
+    viewModel: FavouriteViewModel,
+    navHostController: NavHostController,
+    onClick: (String) -> Unit
+) {
 
     val showDropDown = rememberSaveable { mutableStateOf(false) }
-    val selectedIndex = rememberSaveable { mutableStateOf(-1) }
+    val selectedIndex = rememberSaveable { mutableIntStateOf(-1) }
 
     val uiState = viewModel.uiState.collectAsState(FavouriteScreen.UiState())
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(key1 = viewModel.navigation) {
+        viewModel.navigation.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collectLatest { navigation ->
+                when (navigation) {
+                    is FavouriteScreen.Navigation.GoToRecipeDetailsScreen -> {
+                        navHostController.navigate(NavigationRoutes.RecipeDetails.sendId(navigation.id))
+                    }
+                }
+            }
+    }
+
 
     Scaffold(
         topBar = {
@@ -81,36 +105,36 @@ fun FavouriteScreen(viewModel: FavouriteViewModel, onClick: (String) -> Unit) {
                             }
                         ) {
                             DropdownMenuItem(text = { Text(text = "Alphabetical") }, onClick = {
-                                selectedIndex.value = 0
+                                selectedIndex.intValue = 0
                                 showDropDown.value = showDropDown.value.not()
                                 viewModel.onEvent(FavouriteScreen.Event.AlphabeticalSort)
                             }, leadingIcon = {
-                                RadioButton(selected = selectedIndex.value == 0, onClick = {
-                                    selectedIndex.value = 0
+                                RadioButton(selected = selectedIndex.intValue == 0, onClick = {
+                                    selectedIndex.intValue = 0
                                     showDropDown.value = showDropDown.value.not()
                                     viewModel.onEvent(FavouriteScreen.Event.AlphabeticalSort)
                                 })
                             })
 
                             DropdownMenuItem(text = { Text(text = "Less Ingredients") }, onClick = {
-                                selectedIndex.value = 1
+                                selectedIndex.intValue = 1
                                 showDropDown.value = showDropDown.value.not()
                                 viewModel.onEvent(FavouriteScreen.Event.LessIngredientsSort)
                             }, leadingIcon = {
-                                RadioButton(selected = selectedIndex.value == 1, onClick = {
-                                    selectedIndex.value = 1
+                                RadioButton(selected = selectedIndex.intValue == 1, onClick = {
+                                    selectedIndex.intValue = 1
                                     showDropDown.value = showDropDown.value.not()
                                     viewModel.onEvent(FavouriteScreen.Event.LessIngredientsSort)
                                 })
                             })
 
                             DropdownMenuItem(text = { Text(text = "Reset") }, onClick = {
-                                selectedIndex.value = 2
+                                selectedIndex.intValue = 2
                                 showDropDown.value = showDropDown.value.not()
                                 viewModel.onEvent(FavouriteScreen.Event.ResetSort)
                             }, leadingIcon = {
-                                RadioButton(selected = selectedIndex.value == 2, onClick = {
-                                    selectedIndex.value = 2
+                                RadioButton(selected = selectedIndex.intValue == 2, onClick = {
+                                    selectedIndex.intValue = 2
                                     showDropDown.value = showDropDown.value.not()
                                     viewModel.onEvent(FavouriteScreen.Event.ResetSort)
                                 })
@@ -119,6 +143,11 @@ fun FavouriteScreen(viewModel: FavouriteViewModel, onClick: (String) -> Unit) {
                     }
                 }
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = {}) {
+                Icon(imageVector = Icons.Rounded.Star, contentDescription = null)
+            }
         }
     ) { paddingValues ->
 

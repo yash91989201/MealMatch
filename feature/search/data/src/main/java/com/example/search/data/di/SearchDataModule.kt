@@ -1,5 +1,6 @@
 package com.example.search.data.di
 
+import com.example.search.data.local.RecipeDao
 import com.example.search.data.remote.SearchApiService
 import com.example.search.data.repository.SearchRepoImpl
 import com.example.search.domain.repository.SearchRepository
@@ -33,7 +34,10 @@ object SearchDataModule {
     }
 
     @Provides
-    fun provideSearchRepo(searchApiService: SearchApiService): SearchRepository {
-        return SearchRepoImpl(searchApiService)
+    fun provideSearchRepo(
+        searchApiService: SearchApiService,
+        recipeDao: RecipeDao
+    ): SearchRepository {
+        return SearchRepoImpl(searchApiService = searchApiService, recipeDao = recipeDao)
     }
 }

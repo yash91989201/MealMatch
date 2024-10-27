@@ -43,7 +43,11 @@ class RecipeListViewModel @Inject constructor(
                 }
             }
 
-            RecipeList.Event.FavoriteScreen -> TODO()
+            RecipeList.Event.FavoriteScreen -> {
+                viewModelScope.launch {
+                    _navigation.send(RecipeList.Navigation.GoToFavoriteScreen)
+                }
+            }
         }
     }
 

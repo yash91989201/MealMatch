@@ -6,7 +6,7 @@ import com.example.common.utils.UiText
 import com.example.search.domain.model.Recipe
 import com.example.search.domain.use_cases.GetRecipesFromLocalDbUseCase
 import com.example.search.screens.favourite.FavouriteScreen.Navigation.*
-import jakarta.inject.Inject
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,8 +16,9 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class FavouriteViewModel @Inject constructor(private val getRecipesFromLocalDbUseCase: GetRecipesFromLocalDbUseCase) :
-    ViewModel() {
+class FavouriteViewModel @Inject constructor(
+    private val getRecipesFromLocalDbUseCase: GetRecipesFromLocalDbUseCase
+) : ViewModel() {
 
     private val _uiState =
         MutableStateFlow(FavouriteScreen.UiState())
@@ -43,6 +44,11 @@ class FavouriteViewModel @Inject constructor(private val getRecipesFromLocalDbUs
             }
 
             is FavouriteScreen.Event.DeleteRecipe -> TODO()
+            is FavouriteScreen.Event.GoToRecipeDetails -> {
+                viewModelScope.launch {
+                    _navigation.send(GoToRecipeDetailsScreen(event.id))
+                }
+            }
         }
     }
 
@@ -83,5 +89,6 @@ object FavouriteScreen {
 
         data class ShowRecipeDetails(val id: String) : Event
         data class DeleteRecipe(val id: String) : Event
+        data class GoToRecipeDetails(val id: String) : Event
     }
 }
