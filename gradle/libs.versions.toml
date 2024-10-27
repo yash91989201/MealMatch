@@ -8,7 +8,6 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.6"
 activityCompose = "1.9.3"
 composeBom = "2024.10.00"
-constraintLayoutCompose = "1.0.1"
 room = "2.6.1"
 daggerHilt = "2.52"
 ksp = "2.0.21-1.0.25"
@@ -24,6 +23,7 @@ kotlinxSerialization = "1.6.3"
 mediaThree = "1.4.1"
 youtubeVideoPlayer = "0.28"
 retrofit = "2.11.0"
+mockk = "1.13.10"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -69,8 +69,8 @@ coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 #mockk
-mockk-android = { module = "io.mockk:mockk-android", version = "1.13.10" }
-mockk-agent = { module = "io.mockk:mockk-agent", version = "1.13.2" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
+mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockk" }
 
 #collect as state
 compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "composeRuntimeLiveData" }

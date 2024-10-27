@@ -1,5 +1,6 @@
 package com.example.search.domain.use_cases
 
+import android.util.Log
 import com.example.common.utils.NetworkResult
 import com.example.search.domain.model.Recipe
 import com.example.search.domain.repository.SearchRepository
@@ -7,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import jakarta.inject.Inject
+import javax.inject.Inject
 
 class GetAllRecipeUseCase @Inject constructor(
     private val searchRepository: SearchRepository

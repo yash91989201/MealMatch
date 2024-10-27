@@ -33,7 +33,7 @@ object SearchDataModule {
     }
 
     @Provides
-    fun providerSearchRepo(searchApiService: SearchApiService): SearchRepository {
+    fun provideSearchRepo(searchApiService: SearchApiService): SearchRepository {
         return SearchRepoImpl(searchApiService)
     }
 }

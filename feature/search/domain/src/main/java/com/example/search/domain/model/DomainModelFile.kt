@@ -1,6 +1,11 @@
 package com.example.search.domain.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
 data class Recipe(
+    @PrimaryKey(autoGenerate = false)
     val idMeal: String,
     val strArea: String,
     val strMeal: String,

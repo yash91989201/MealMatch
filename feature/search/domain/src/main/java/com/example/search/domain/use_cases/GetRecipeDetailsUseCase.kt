@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import jakarta.inject.Inject
+import javax.inject.Inject
 
 class GetRecipeDetailsUseCase @Inject constructor(val searchRepository: SearchRepository) {
 

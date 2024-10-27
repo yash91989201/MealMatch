@@ -12,7 +12,7 @@ interface SearchApiService {
         @Query("s") s: String
     ): Response<RecipeResponse>
 
-    @GET("/api/json/v1/1/search.php")
+    @GET("/api/json/v1/1/lookup.php")
     suspend fun getRecepieDetails(
         @Query("i") i: String
     ): Response<RecipeDetailsResponse>
