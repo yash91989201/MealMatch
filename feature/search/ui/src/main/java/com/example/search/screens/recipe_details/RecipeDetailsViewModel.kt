@@ -57,6 +57,10 @@ class RecipeDetailsViewModel @Inject constructor(
             is com.example.search.screens.recipe_details.RecipeDetails.Event.InsertRecipe -> {
                 insertRecipeUseCase.invoke(event.recipeDetail.toRecipe()).launchIn(viewModelScope)
             }
+
+            is com.example.search.screens.recipe_details.RecipeDetails.Event.GoToMediaPlayer -> viewModelScope.launch{
+                _navigation.send(com.example.search.screens.recipe_details.RecipeDetails.Navigation.GoToMediaPlayer(event.youtubeUrl))
+            }
         }
     }
 
@@ -111,6 +115,7 @@ object RecipeDetails {
 
     sealed interface Navigation {
         data object GoToRecipeListScreen : Navigation
+        data class GoToMediaPlayer(val youtubeUrl: String) : Navigation
     }
 
     sealed interface Event {
@@ -119,5 +124,6 @@ object RecipeDetails {
         data class DeleteRecipe(val recipeDetail: RecipeDetails) : Event
 
         data object GoToRecipeListScreen : Event
+        data class GoToMediaPlayer(val youtubeUrl: String) : Event
     }
 }

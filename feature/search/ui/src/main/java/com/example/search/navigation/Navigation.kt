@@ -68,6 +68,9 @@ class SearchFeatureApiImpl : SearchFeatureApi {
                     navHostController = navHostController,
                     onClick = { mealId ->
                         viewModel.onEvent(FavouriteScreen.Event.GoToRecipeDetails(mealId))
+                    },
+                    onNavigationClick = {
+                        viewModel.onEvent(FavouriteScreen.Event.GoToRecipeListScreen)
                     }
                 )
             }

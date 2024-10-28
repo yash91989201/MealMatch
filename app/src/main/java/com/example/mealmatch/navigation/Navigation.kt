@@ -16,5 +16,10 @@ fun RecipeNavigation(navigationSubGraphs: NavigationSubGraphs) {
             navHostController = navHostController,
             navGraphBuilder = this,
         )
+
+        navigationSubGraphs.mediaPlayerFeatureApi.registerGraph(
+            navHostController = navHostController,
+            navGraphBuilder = this
+        )
     }
 }

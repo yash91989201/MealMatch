@@ -1,7 +1,7 @@
 package com.example.search.screens.recipe_details
 
+import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,18 +16,17 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,13 +36,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.common.navigation.NavigationRoutes
 import com.example.common.utils.UiText
 import kotlinx.coroutines.flow.collectLatest
 import com.example.search.domain.model.RecipeDetails
@@ -60,13 +62,19 @@ fun RecipeDetailsScreen(
 ) {
     val uiState = viewModel.uiState.collectAsState()
     val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
 
     LaunchedEffect(key1 = viewModel.navigation) {
         viewModel.navigation.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collectLatest { navigation ->
                 when (navigation) {
-                    com.example.search.screens.recipe_details.RecipeDetails.Navigation.GoToRecipeListScreen -> {
+                    is com.example.search.screens.recipe_details.RecipeDetails.Navigation.GoToRecipeListScreen -> {
                         navHostController.popBackStack()
+                    }
+
+                    is com.example.search.screens.recipe_details.RecipeDetails.Navigation.GoToMediaPlayer -> {
+                        val youtubeUrl = navigation.youtubeUrl.split("v=").last()
+                        navHostController.navigate(NavigationRoutes.MediaPlayer.sendUrl(youtubeUrl))
                     }
                 }
             }
@@ -79,29 +87,56 @@ fun RecipeDetailsScreen(
                 title = {
                     Text(
                         text = uiState.value.data?.strMeal.toString(),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.headlineSmall,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
                     )
                 },
                 navigationIcon = {
-                    Icon(
-                        imageVector = Icons.Rounded.KeyboardArrowLeft,
-                        contentDescription = "Go back to recipe list",
-                        modifier = Modifier.clickable { onNavigationClick.invoke() })
+                    IconButton(
+                        onClick = { onNavigationClick.invoke() }
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
+                            contentDescription = "Go back to recipe list",
+                        )
+                    }
                 },
                 actions = {
-                    Icon(
-                        imageVector = Icons.Rounded.Star,
-                        contentDescription = "Mark recipe as favourite",
-                        modifier = Modifier.clickable {
+                    IconButton(
+                        onClick = {
                             uiState.value.data?.let {
                                 onFavouriteClick.invoke(it)
+                                Toast.makeText(
+                                    context,
+                                    "Recipe added to favourites",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
-                    )
-                    Icon(
-                        imageVector = Icons.Rounded.Delete,
-                        contentDescription = "Remove recipe from favourite"
-                    )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Star,
+                            contentDescription = "Mark recipe as favourite",
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+                            uiState.value.data?.let {
+                                onDelete.invoke(it)
+                                Toast.makeText(
+                                    context,
+                                    "Recipe remove from favourites",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Delete,
+                            contentDescription = "Remove recipe from favourite"
+                        )
+                    }
                 }
             )
         }
@@ -184,13 +219,24 @@ fun RecipeDetailsScreen(
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     if (recipe.strYoutube.isNotEmpty()) {
-                        Text(
-                            text = "Watch Youtube Video",
-                            style = MaterialTheme.typography.bodyMedium,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        )
+
                         Spacer(modifier = Modifier.height(32.dp))
+                        TextButton(
+                            onClick = {
+                                viewModel.onEvent(
+                                    com.example.search.screens.recipe_details.RecipeDetails.Event.GoToMediaPlayer(
+                                        recipe.strYoutube
+                                    )
+                                )
+                            }
+                        ) {
+                            Text(
+                                text = "Watch Youtube Video",
+                                style = MaterialTheme.typography.bodyMedium,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
                     }
                 }
             }

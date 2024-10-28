@@ -31,6 +31,10 @@ class RecipeListViewModel @Inject constructor(
     private val _navigation = Channel<RecipeList.Navigation>()
     val navigation: Flow<RecipeList.Navigation> = _navigation.receiveAsFlow()
 
+    init {
+        search("s")
+    }
+
     fun onEvent(event: RecipeList.Event) {
         when (event) {
             is RecipeList.Event.SearchRecipe -> {
@@ -91,5 +95,4 @@ object RecipeList {
 
         data object FavoriteScreen : Event
     }
-
 }

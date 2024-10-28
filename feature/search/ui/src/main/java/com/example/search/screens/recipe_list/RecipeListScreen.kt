@@ -1,6 +1,5 @@
 package com.example.search.screens.recipe_list
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -35,6 +34,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.common.utils.UiText
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.layout.ContentScale
@@ -61,9 +64,10 @@ fun RecipeListScreen(
     LaunchedEffect(key1 = viewModel.navigation) {
         viewModel.navigation.flowWithLifecycle(lifecycleOwner.lifecycle).collectLatest {
             when (it) {
-                RecipeList.Navigation.GoToFavoriteScreen -> {
-                    navHostController.navigate(NavigationRoutes.FavouriteScreen)
+                is RecipeList.Navigation.GoToFavoriteScreen -> {
+                    navHostController.navigate(NavigationRoutes.FavouriteScreen.route)
                 }
+
                 is RecipeList.Navigation.GoToRecipeDetails -> {
                     navHostController.navigate(NavigationRoutes.RecipeDetails.sendId(it.id))
                 }
@@ -90,6 +94,18 @@ fun RecipeListScreen(
                 ),
                 modifier = modifier.fillMaxWidth()
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    viewModel.onEvent(RecipeList.Event.FavoriteScreen)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Star,
+                    contentDescription = "Go to favourite screen"
+                )
+            }
         }
     ) { paddingValues ->
         if (uiState.value.isLoading) {

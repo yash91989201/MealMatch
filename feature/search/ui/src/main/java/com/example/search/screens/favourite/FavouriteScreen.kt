@@ -39,6 +39,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.runtime.LaunchedEffect
@@ -60,7 +61,8 @@ import kotlinx.coroutines.flow.collectLatest
 fun FavouriteScreen(
     viewModel: FavouriteViewModel,
     navHostController: NavHostController,
-    onClick: (String) -> Unit
+    onClick: (String) -> Unit,
+    onNavigationClick: () -> Unit,
 ) {
 
     val showDropDown = rememberSaveable { mutableStateOf(false) }
@@ -76,6 +78,10 @@ fun FavouriteScreen(
                     is FavouriteScreen.Navigation.GoToRecipeDetailsScreen -> {
                         navHostController.navigate(NavigationRoutes.RecipeDetails.sendId(navigation.id))
                     }
+
+                    is FavouriteScreen.Navigation.GoToRecipeListScreen -> {
+                        navHostController.navigate(NavigationRoutes.RecipeList.route)
+                    }
                 }
             }
     }
@@ -84,6 +90,14 @@ fun FavouriteScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = { onNavigationClick.invoke() }) {
+                        Icon(
+                            imageVector = Icons.Rounded.KeyboardArrowLeft,
+                            contentDescription = "Go back to recipe list",
+                        )
+                    }
+                },
                 title = {
                     Text(
                         text = "Favourite Recipes",
@@ -128,17 +142,20 @@ fun FavouriteScreen(
                                 })
                             })
 
-                            DropdownMenuItem(text = { Text(text = "Reset") }, onClick = {
-                                selectedIndex.intValue = 2
-                                showDropDown.value = showDropDown.value.not()
-                                viewModel.onEvent(FavouriteScreen.Event.ResetSort)
-                            }, leadingIcon = {
-                                RadioButton(selected = selectedIndex.intValue == 2, onClick = {
+                            DropdownMenuItem(
+                                text = { Text(text = "Reset") },
+                                onClick = {
                                     selectedIndex.intValue = 2
                                     showDropDown.value = showDropDown.value.not()
                                     viewModel.onEvent(FavouriteScreen.Event.ResetSort)
+                                },
+                                leadingIcon = {
+                                    RadioButton(selected = selectedIndex.intValue == 2, onClick = {
+                                        selectedIndex.intValue = 2
+                                        showDropDown.value = showDropDown.value.not()
+                                        viewModel.onEvent(FavouriteScreen.Event.ResetSort)
+                                    })
                                 })
-                            })
                         }
                     }
                 }
@@ -210,7 +227,7 @@ fun FavouriteScreen(
                                     onClick = {
                                         viewModel.onEvent(
                                             FavouriteScreen.Event.DeleteRecipe(
-                                                it.idMeal
+                                                it
                                             )
                                         )
                                     },
