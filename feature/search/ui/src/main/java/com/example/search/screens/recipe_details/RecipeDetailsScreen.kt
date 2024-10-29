@@ -45,7 +45,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.common.navigation.NavigationRoutes
+import com.example.common.navigation.NavigationRoute
 import com.example.common.utils.UiText
 import kotlinx.coroutines.flow.collectLatest
 import com.example.search.domain.model.RecipeDetails
@@ -74,7 +74,7 @@ fun RecipeDetailsScreen(
 
                     is com.example.search.screens.recipe_details.RecipeDetails.Navigation.GoToMediaPlayer -> {
                         val youtubeUrl = navigation.youtubeUrl.split("v=").last()
-                        navHostController.navigate(NavigationRoutes.MediaPlayer.sendUrl(youtubeUrl))
+                        navHostController.navigate(NavigationRoute.MediaPlayer.sendUrl(youtubeUrl))
                     }
                 }
             }
@@ -196,7 +196,7 @@ fun RecipeDetailsScreen(
                         if (ingredient.first.isNotEmpty() || ingredient.second.isNotEmpty()) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(bottom = 8.dp)
@@ -209,6 +209,12 @@ fun RecipeDetailsScreen(
                                         .size(60.dp)
                                         .background(color = Color.White, shape = CircleShape)
                                         .clip(CircleShape)
+                                )
+                                Text(
+                                    text = ingredient.first,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    textAlign = TextAlign.Start,
+                                    modifier = Modifier.weight(1f)
                                 )
                                 Text(
                                     text = ingredient.second,

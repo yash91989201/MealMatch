@@ -38,6 +38,7 @@ import com.example.common.utils.UiText
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.Star
@@ -53,7 +54,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.common.navigation.NavigationRoutes
+import com.example.common.navigation.NavigationRoute
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -76,11 +77,11 @@ fun FavouriteScreen(
             .collectLatest { navigation ->
                 when (navigation) {
                     is FavouriteScreen.Navigation.GoToRecipeDetailsScreen -> {
-                        navHostController.navigate(NavigationRoutes.RecipeDetails.sendId(navigation.id))
+                        navHostController.navigate(NavigationRoute.RecipeDetails.sendId(navigation.id))
                     }
 
                     is FavouriteScreen.Navigation.GoToRecipeListScreen -> {
-                        navHostController.navigate(NavigationRoutes.RecipeList.route)
+                        navHostController.navigate(NavigationRoute.RecipeList.route)
                     }
                 }
             }
@@ -93,7 +94,7 @@ fun FavouriteScreen(
                 navigationIcon = {
                     IconButton(onClick = { onNavigationClick.invoke() }) {
                         Icon(
-                            imageVector = Icons.Rounded.KeyboardArrowLeft,
+                            imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
                             contentDescription = "Go back to recipe list",
                         )
                     }

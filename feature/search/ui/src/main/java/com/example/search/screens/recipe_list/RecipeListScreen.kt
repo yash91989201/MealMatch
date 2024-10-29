@@ -45,7 +45,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
-import com.example.common.navigation.NavigationRoutes
+import com.example.common.navigation.NavigationRoute
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -65,11 +65,11 @@ fun RecipeListScreen(
         viewModel.navigation.flowWithLifecycle(lifecycleOwner.lifecycle).collectLatest {
             when (it) {
                 is RecipeList.Navigation.GoToFavoriteScreen -> {
-                    navHostController.navigate(NavigationRoutes.FavouriteScreen.route)
+                    navHostController.navigate(NavigationRoute.FavouriteScreen.route)
                 }
 
                 is RecipeList.Navigation.GoToRecipeDetails -> {
-                    navHostController.navigate(NavigationRoutes.RecipeDetails.sendId(it.id))
+                    navHostController.navigate(NavigationRoute.RecipeDetails.sendId(it.id))
                 }
             }
         }

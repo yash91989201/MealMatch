@@ -1,12 +1,11 @@
 package com.example.search.navigation
 
-import android.util.Log
 import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.example.common.navigation.FeatureApi
-import com.example.common.navigation.NavigationRoutes
+import com.example.common.navigation.NavigationRoute
 import com.example.common.navigation.NavigationSubGraphRoute
 import com.example.search.screens.favourite.FavouriteScreen
 import com.example.search.screens.favourite.FavouriteViewModel
@@ -26,9 +25,9 @@ class SearchFeatureApiImpl : SearchFeatureApi {
     ) {
         navGraphBuilder.navigation(
             route = NavigationSubGraphRoute.Search.route,
-            startDestination = NavigationRoutes.RecipeList.route
+            startDestination = NavigationRoute.RecipeList.route
         ) {
-            composable(route = NavigationRoutes.RecipeList.route) {
+            composable(route = NavigationRoute.RecipeList.route) {
                 val viewModel = hiltViewModel<RecipeListViewModel>()
                 RecipeListScreen(
                     viewModel = viewModel,
@@ -37,7 +36,7 @@ class SearchFeatureApiImpl : SearchFeatureApi {
                     viewModel.onEvent(RecipeList.Event.GoToRecipeDetails(mealId))
                 }
             }
-            composable(route = NavigationRoutes.RecipeDetails.route) {
+            composable(route = NavigationRoute.RecipeDetails.route) {
                 val mealId = it.arguments?.getString("id")
                 val viewModel = hiltViewModel<RecipeDetailsViewModel>()
 
@@ -61,7 +60,7 @@ class SearchFeatureApiImpl : SearchFeatureApi {
                     },
                 )
             }
-            composable(route = NavigationRoutes.FavouriteScreen.route) {
+            composable(route = NavigationRoute.FavouriteScreen.route) {
                 val viewModel = hiltViewModel<FavouriteViewModel>()
                 FavouriteScreen(
                     viewModel = viewModel,

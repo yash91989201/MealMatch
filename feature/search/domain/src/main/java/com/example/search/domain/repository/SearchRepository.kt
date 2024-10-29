@@ -15,4 +15,6 @@ interface SearchRepository {
     suspend fun deleteRecipe(recipe: Recipe)
 
     fun getAllRecipe(): Flow<List<Recipe>>
+
+    suspend fun getRandomRecipes(f:String): Result<List<Recipe>>
 }

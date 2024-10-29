@@ -1,6 +1,5 @@
 package com.example.search.data.repository
 
-import android.util.Log
 import com.example.search.data.local.RecipeDao
 import com.example.search.data.mappers.toDomain
 import com.example.search.data.remote.SearchApiService
@@ -16,6 +15,21 @@ class SearchRepoImpl(
     override suspend fun getRecipes(s: String): Result<List<Recipe>> {
         return try {
             val response = searchApiService.getRecepies(s)
+            if (response.isSuccessful) {
+                response.body()?.meals?.let {
+                    Result.success(it.toDomain())
+                } ?: run { Result.failure(Exception("Error Occurred: Fetching recipes")) }
+            } else {
+                Result.failure(Exception("Error Occurred: Fetching recipes"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getRandomRecipes(f: String): Result<List<Recipe>> {
+        return try {
+            val response = searchApiService.getRecepiesByFirstLetter(f)
             if (response.isSuccessful) {
                 response.body()?.meals?.let {
                     Result.success(it.toDomain())
